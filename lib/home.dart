@@ -19,25 +19,35 @@ class ChooseMovies extends StatefulWidget {
 }
 
 class _ChooseMoviesState extends State<ChooseMovies> {
-  String _movieImgUrl = 'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg';
-  String _movieTitle = 'Lord of the Rings';
+  final String _movieImgUrl = 'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg';
+  final String _movieTitle = 'Lord of the Rings';
+
+  final int _currentMovieId = -1;
+  
+  final List<int> _partnerMovies = [634649, 568124];
+  final List<int> _myMovies = [];
+
+  // Display the "matched" alert
+  void _showMatchedAlert() {
+    // TODO: display matched alert
+    // ignore: avoid_print
+    print('match alert displayed for movie $_currentMovieId');
+  }
 
   // Add this movie to liked array
   void _swipedRight() {
     setState(() {
-      // TODO: add this movie to 'liked' array
+      _myMovies.add(_currentMovieId);
+      if (_partnerMovies.contains(_currentMovieId)) _showMatchedAlert();
       // ignore: avoid_print
-      print('MatchMovie pressed');
+      print('user swiped right on $_currentMovieId');
     });
   }
 
   // Skip this movie
   void _swipedLeft() {
-    setState(() {
-      // TODO: skip this movie
-      // ignore: avoid_print
-      print('NextMovie pressed');
-    });
+    // ignore: avoid_print
+    print('user swiped left on $_currentMovieId');
   }
 
   @override
