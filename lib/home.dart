@@ -175,7 +175,7 @@ class _ChooseMoviesState extends State<ChooseMovies> {
 
   // Display the "no more movies" alert
   void _showEmptyAlert() {
-    _showAlert('No more matches! ',
+    _showAlert('No more movies! ',
         Icon(Icons.hourglass_empty, color: Colors.white), Colors.blue);
   }
 
