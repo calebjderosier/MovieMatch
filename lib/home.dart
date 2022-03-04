@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:movie_match/network/Movie.dart';
 import 'dart:math';
@@ -132,6 +134,10 @@ class _ChooseMoviesState extends State<ChooseMovies> {
     setState(() {
       _currentIndex++;
       _currentMovie = _moviesToDisplay[_currentIndex];
+      print('CURRENT INDEX');
+      print(_currentIndex);
+      print('MOVIES ARRAY LENGTH');
+      print(_moviesToDisplay.length);
       if (_currentIndex == _moviesToDisplay.length) {
         _showEmptyAlert();
       }
@@ -220,6 +226,9 @@ class _ChooseMoviesState extends State<ChooseMovies> {
               },
               onStackFinished: () {
                 print("onStackFinished");
+                _currentMovie = Movie(
+                    id: -1, title: '', releaseDate: "123", posterPath: "");
+                _showEmptyAlert();
               },
               itemChanged: (SwipeItem item, int index) {
                 print("item: ${item.content.text}, index: $index");
