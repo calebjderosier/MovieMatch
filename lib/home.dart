@@ -21,6 +21,8 @@ class ChooseMovies extends StatefulWidget {
 class _ChooseMoviesState extends State<ChooseMovies> {
   String _movieImgUrl = 'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg';
   String _movieTitle = 'Lord of the Rings';
+
+  // Marked this movie as matched & trigger appropriate UI
   void _matchMovie() {
     setState(() {
       // TODO: match this movie
@@ -29,7 +31,7 @@ class _ChooseMoviesState extends State<ChooseMovies> {
     });
   }
 
-  //
+  // Skip this movie
   void _nextMovie() {
     setState(() {
       // TODO: skip this movie
@@ -41,40 +43,28 @@ class _ChooseMoviesState extends State<ChooseMovies> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.green,
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {}, icon: Icon(Icons.settings, color: Colors.green))
-        ],
-      ),
-      body: Container(
-          child: ListView(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+      body: ListView(
+        padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
         children: [
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           Center(
-              child: buildMovieItem(
-                  _movieImgUrl,
-                  context)),
-          SizedBox(
+            child: buildMovieItem(
+              _movieImgUrl,
+              context
+            )
+          ),
+          const SizedBox(
             height: 35,
           ),
           Center(
             child: Text(
               _movieTitle,
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 35,
           ),
           Row(
@@ -83,23 +73,23 @@ class _ChooseMoviesState extends State<ChooseMovies> {
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
                 ),
-                onPressed: () {},
-                child: Icon(Icons.close),
+                onPressed: _nextMovie,
+                child: const Icon(Icons.close),
               ),
               ElevatedButton(
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
                 ),
-                onPressed: () {},
-                child: Icon(Icons.check)
+                onPressed: _matchMovie,
+                child: const Icon(Icons.check),
               )
             ],
           )
         ],
-      )),
+      ),
     );
   }
 }
@@ -111,18 +101,21 @@ Stack buildMovieItem(String imgUrl, BuildContext context) {
         width: double.infinity,
         height: MediaQuery.of(context).size.height * 0.75,
         decoration: BoxDecoration(
-            border: Border.all(
-                width: 4, color: Theme.of(context).scaffoldBackgroundColor),
-            boxShadow: [
-              BoxShadow(
-                spreadRadius: 2,
-                blurRadius: 10,
-                color: Colors.black.withOpacity(0.1),
-                offset: Offset(0, 10),
-              )
-            ],
-            image: DecorationImage(
-                fit: BoxFit.cover, image: NetworkImage(imgUrl))),
+          border: Border.all(
+            width: 4, color: Theme.of(context).scaffoldBackgroundColor,
+          ),
+          boxShadow: [
+            BoxShadow(
+              spreadRadius: 2,
+              blurRadius: 10,
+              color: Colors.black.withOpacity(0.1),
+              offset: const Offset(0, 10),
+            )
+          ],
+          image: DecorationImage(
+            fit: BoxFit.cover, image: NetworkImage(imgUrl)
+          )
+        ),
       )
     ],
   );
