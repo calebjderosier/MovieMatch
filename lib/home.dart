@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movie_match/network/Movie.dart';
+import 'dart:math';
 
 class MovieMatchApp extends StatelessWidget {
   const MovieMatchApp({Key? key}) : super(key: key);
@@ -19,25 +21,79 @@ class ChooseMovies extends StatefulWidget {
 }
 
 class _ChooseMoviesState extends State<ChooseMovies> {
-  String _movieImgUrl = 'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg';
-  String _movieTitle = 'Lord of the Rings';
+  @override
+  void initState() {
+    super.initState();
+    _currentMovie = _moviesToDisplay[Random().nextInt(_moviesToDisplay.length)];
+  }
+
+  late Movie _currentMovie;
+  final List<Movie> _moviesToDisplay = [
+    Movie(
+        id: 1,
+        title: 'Lord of the Rings',
+        releaseDate: "1",
+        posterPath:
+            "https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg"),
+    Movie(
+        id: 2,
+        title: 'Encanto',
+        releaseDate: "12",
+        posterPath:
+            "https://m.media-amazon.com/images/I/71noGMUal1S._AC_SL1100_.jpg"),
+    Movie(
+        id: 3,
+        title: 'Spider-Man: No Way Home',
+        releaseDate: "123",
+        posterPath:
+            "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_FMjpg_UX1000_.jpg"),
+    Movie(
+        id: 4,
+        title: 'Batman',
+        releaseDate: "1234",
+        posterPath:
+            "https://sportshub.cbsistatic.com/i/2022/01/26/c77b5cd2-e1db-4e45-9049-8eaa1b9a7cd0/the-batman.jpg?auto=webp&width=1200&height=1778&crop=0.675:1,smart"),
+  ];
+  
+  final List<int> _partnerMovies = [634649, 568124];
+  final List<int> _myMovies = [];
+
+  // Sets the current movie to another in the random list.
+  Movie _getNextMovie() {
+    setState(() {
+      _moviesToDisplay.removeWhere((element) => element.id == _currentMovie.id);
+      int _nextId = Random().nextInt(_moviesToDisplay.length);
+
+      _currentMovie = _moviesToDisplay[_nextId]; // TODO set to actual next movie ID
+      // ignore: avoid_print
+      print('newId is $_nextId');
+    });
+    return _moviesToDisplay[_currentMovie.id];
+  }
+
+  // Display the "matched" alert
+  void _showMatchedAlert() {
+    // TODO: display matched alert
+    // ignore: avoid_print
+    print('match alert displayed for movie ${_currentMovie.id}');
+  }
 
   // Add this movie to liked array
   void _swipedRight() {
     setState(() {
-      // TODO: add this movie to 'liked' array
+      _myMovies.add(_currentMovie.id);
+      if (_partnerMovies.contains(_currentMovie.id)) _showMatchedAlert();
       // ignore: avoid_print
-      print('MatchMovie pressed');
+      print('user swiped right on ${_currentMovie.id}');
+      _getNextMovie();
     });
   }
 
   // Skip this movie
   void _swipedLeft() {
-    setState(() {
-      // TODO: skip this movie
-      // ignore: avoid_print
-      print('NextMovie pressed');
-    });
+    // ignore: avoid_print
+    print('user swiped left on ${_currentMovie.id}');
+    _getNextMovie();
   }
 
   @override
@@ -49,19 +105,14 @@ class _ChooseMoviesState extends State<ChooseMovies> {
           const SizedBox(
             height: 15,
           ),
-          Center(
-            child: buildMovieItem(
-              _movieImgUrl,
-              _movieTitle,
-              context
-            )
-          ),
+          Center(child: buildMovieItem(_currentMovie, context)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
                   padding: const EdgeInsets.symmetric(horizontal: 50),
                 ),
                 onPressed: _swipedLeft,
@@ -69,7 +120,8 @@ class _ChooseMoviesState extends State<ChooseMovies> {
               ),
               ElevatedButton(
                 style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
                   padding: const EdgeInsets.symmetric(horizontal: 50),
                 ),
                 onPressed: _swipedRight,
@@ -84,7 +136,7 @@ class _ChooseMoviesState extends State<ChooseMovies> {
 }
 
 // Create a new movie item using the given imgUrl and title.
-Column buildMovieItem(String imgUrl, String title, BuildContext context) {
+Column buildMovieItem(Movie movie, BuildContext context) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -92,28 +144,28 @@ Column buildMovieItem(String imgUrl, String title, BuildContext context) {
         width: double.infinity,
         height: MediaQuery.of(context).size.height * 0.75,
         decoration: BoxDecoration(
-          border: Border.all(
-            width: 4, color: Theme.of(context).scaffoldBackgroundColor,
-          ),
-          boxShadow: [
-            BoxShadow(
-              spreadRadius: 2,
-              blurRadius: 10,
-              color: Colors.black.withOpacity(0.1),
-              offset: const Offset(0, 10),
-            )
-          ],
-          image: DecorationImage(
-            fit: BoxFit.cover, image: NetworkImage(imgUrl)
-          )
-        ),
+            border: Border.all(
+              width: 4,
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
+            boxShadow: [
+              BoxShadow(
+                spreadRadius: 2,
+                blurRadius: 10,
+                color: Colors.black.withOpacity(0.1),
+                offset: const Offset(0, 10),
+              )
+            ],
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(movie.posterPath))),
       ),
       const SizedBox(
         height: 35,
       ),
       Center(
         child: Text(
-          title,
+          movie.title,
           style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
         ),
       ),
