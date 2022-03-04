@@ -1,7 +1,8 @@
 import 'package:http/http.dart' as http;
+import 'Movie.dart';
 
 class MovieService {
-  static Future<List<MoviesModel>> fetchPopularMovies() async {
+  static Future<List<MovieModel>> fetchPopularMovies() async {
     var response =
         await http.get(Uri.parse("https://api.themoviedb.org/3/movie/popular"));
     if (response.statusCode == 200) {

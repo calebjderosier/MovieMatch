@@ -25,7 +25,7 @@ class MovieModel {
         title: json["original_title"],
         releaseDate: json["release_date"],
         posterPath: json["poster_path"]
-    )
+    );
 
     Map<String, dynamic> toJson() => {
         "id": id,
