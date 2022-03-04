@@ -52,20 +52,9 @@ class _ChooseMoviesState extends State<ChooseMovies> {
           Center(
             child: buildMovieItem(
               _movieImgUrl,
+              _movieTitle,
               context
             )
-          ),
-          const SizedBox(
-            height: 35,
-          ),
-          Center(
-            child: Text(
-              _movieTitle,
-              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-            ),
-          ),
-          const SizedBox(
-            height: 35,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,8 +83,10 @@ class _ChooseMoviesState extends State<ChooseMovies> {
   }
 }
 
-Stack buildMovieItem(String imgUrl, BuildContext context) {
-  return Stack(
+// Create a new movie item using the given imgUrl and title.
+Column buildMovieItem(String imgUrl, String title, BuildContext context) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Container(
         width: double.infinity,
@@ -116,7 +107,19 @@ Stack buildMovieItem(String imgUrl, BuildContext context) {
             fit: BoxFit.cover, image: NetworkImage(imgUrl)
           )
         ),
-      )
+      ),
+      const SizedBox(
+        height: 35,
+      ),
+      Center(
+        child: Text(
+          title,
+          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+        ),
+      ),
+      const SizedBox(
+        height: 35,
+      ),
     ],
   );
 }
