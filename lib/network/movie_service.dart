@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'Movie.dart';
+import 'movie.dart';
 
 class MovieService {
   static Future<List<MovieModel>> fetchPopularMovies() async {
