@@ -22,17 +22,17 @@ class _ChooseMoviesState extends State<ChooseMovies> {
   String _movieImgUrl = 'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg';
   String _movieTitle = 'Lord of the Rings';
 
-  // Marked this movie as matched & trigger appropriate UI
-  void _matchMovie() {
+  // Add this movie to liked array
+  void _swipedRight() {
     setState(() {
-      // TODO: match this movie
+      // TODO: add this movie to 'liked' array
       // ignore: avoid_print
       print('MatchMovie pressed');
     });
   }
 
   // Skip this movie
-  void _nextMovie() {
+  void _swipedLeft() {
     setState(() {
       // TODO: skip this movie
       // ignore: avoid_print
@@ -64,7 +64,7 @@ class _ChooseMoviesState extends State<ChooseMovies> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   padding: const EdgeInsets.symmetric(horizontal: 50),
                 ),
-                onPressed: _nextMovie,
+                onPressed: _swipedLeft,
                 child: const Icon(Icons.close),
               ),
               ElevatedButton(
@@ -72,7 +72,7 @@ class _ChooseMoviesState extends State<ChooseMovies> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   padding: const EdgeInsets.symmetric(horizontal: 50),
                 ),
-                onPressed: _matchMovie,
+                onPressed: _swipedRight,
                 child: const Icon(Icons.check),
               )
             ],
