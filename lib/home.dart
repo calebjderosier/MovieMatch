@@ -19,7 +19,8 @@ class ChooseMovies extends StatefulWidget {
 }
 
 class _ChooseMoviesState extends State<ChooseMovies> {
-  String movieImgUrl = 'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg';
+  String _movieImgUrl = 'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg';
+  String _movieTitle = 'Lord of the Rings';
   void _matchMovie() {
     setState(() {
       // TODO: match this movie
@@ -57,19 +58,22 @@ class _ChooseMoviesState extends State<ChooseMovies> {
           child: ListView(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         children: [
-          Center(
-            child: Text(
-              'Choose a movie here',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-            ),
-          ),
           SizedBox(
             height: 15,
           ),
           Center(
               child: buildMovieItem(
-                  movieImgUrl,
+                  _movieImgUrl,
                   context)),
+          SizedBox(
+            height: 35,
+          ),
+          Center(
+            child: Text(
+              _movieTitle,
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+            ),
+          ),
           SizedBox(
             height: 35,
           ),
