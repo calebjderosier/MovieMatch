@@ -36,13 +36,13 @@ class _ChooseMoviesState extends State<ChooseMovies> {
         posterPath:
             "https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg"),
     Movie(
-        id: 2,
+        id: 568124,
         title: 'Encanto',
         releaseDate: "12",
         posterPath:
             "https://m.media-amazon.com/images/I/71noGMUal1S._AC_SL1100_.jpg"),
     Movie(
-        id: 3,
+        id: 634649,
         title: 'Spider-Man: No Way Home',
         releaseDate: "123",
         posterPath:
@@ -62,20 +62,87 @@ class _ChooseMoviesState extends State<ChooseMovies> {
   Movie _getNextMovie() {
     setState(() {
       _moviesToDisplay.removeWhere((element) => element.id == _currentMovie.id);
-      int _nextId = Random().nextInt(_moviesToDisplay.length);
+      int _nextId = _moviesToDisplay.length > 0 ? Random().nextInt(_moviesToDisplay.length) : -1;
 
-      _currentMovie = _moviesToDisplay[_nextId]; // TODO set to actual next movie ID
-      // ignore: avoid_print
-      print('newId is $_nextId');
+      if(_nextId != -1) {
+        _currentMovie = _moviesToDisplay[_nextId];
+      } else {
+        _showEmptyAlert();
+      }
     });
     return _moviesToDisplay[_currentMovie.id];
   }
 
+  // Display the "no more movies" alert
+  void _showEmptyAlert() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 1), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            title: Center(
+                child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+                children: [
+                  TextSpan(text: 'No more movies! '),
+                  WidgetSpan(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 2.0, vertical: 2.0),
+                      child: Icon(Icons.hourglass_empty, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+            backgroundColor: Colors.blue,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          );
+        });
+  }
+
   // Display the "matched" alert
   void _showMatchedAlert() {
-    // TODO: display matched alert
-    // ignore: avoid_print
-    print('match alert displayed for movie ${_currentMovie.id}');
+    showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 1), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            title: Center(
+                child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+                children: [
+                  TextSpan(text: 'Matched! '),
+                  WidgetSpan(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 2.0, vertical: 2.0),
+                      child: Icon(Icons.star, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+            backgroundColor: Colors.pink,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          );
+        });
   }
 
   // Add this movie to liked array
@@ -83,16 +150,12 @@ class _ChooseMoviesState extends State<ChooseMovies> {
     setState(() {
       _myMovies.add(_currentMovie.id);
       if (_partnerMovies.contains(_currentMovie.id)) _showMatchedAlert();
-      // ignore: avoid_print
-      print('user swiped right on ${_currentMovie.id}');
       _getNextMovie();
     });
   }
 
   // Skip this movie
   void _swipedLeft() {
-    // ignore: avoid_print
-    print('user swiped left on ${_currentMovie.id}');
     _getNextMovie();
   }
 
