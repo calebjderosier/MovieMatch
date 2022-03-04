@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:swipe_cards/draggable_card.dart';
+import 'package:swipe_cards/swipe_cards.dart';
+import 'content.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,8 +43,60 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+List<SwipeItem> _swipeItems = <SwipeItem>[];
+  MatchEngine? _matchEngine;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  List<String> _names = [
+    "Step Brothers",
+    "Shrek",
+    "Lord of the Rings",
+    "Spider Man",
+  ];
+
+  List<String> _movies = [
+    'https://i5.walmartimages.com/asr/e8a4a5eb-f5d9-4eef-adb7-ee817f0a5411_1.34810fce84207f7a56601f50510c9e4c.jpeg',
+    'https://images.squarespace-cdn.com/content/v1/5acd17597c93273e08da4786/1547847934765-ZOU5KGSHYT6UVL6O5E5J/Shrek+Poster.png',
+    'https://cdn.shopify.com/s/files/1/0652/4771/files/LOTR_REG_FINALS_Burgos_1024x1024.png?v=1611070010',
+    'https://i5.walmartimages.com/asr/e8a4a5eb-f5d9-4eef-adb7-ee817f0a5411_1.34810fce84207f7a56601f50510c9e4c.jpeg',
+  ];
+
   String _movieTitle = "Title";
   String _movieDesc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+  @override
+  void initState() {
+    for (int i = 0; i < _names.length; i++) {
+      _swipeItems.add(SwipeItem(
+          content: Content(text: _names[i], image: Image.network('${_movies[i]}')),
+          likeAction: () {
+            print("LIKED");
+            _scaffoldKey.currentState?.showSnackBar(SnackBar(
+              content: Text(""),
+              duration: Duration(milliseconds: 500),
+            ));
+          },
+          nopeAction: () {
+            print("LEFT SWIPE");
+            _scaffoldKey.currentState?.showSnackBar(SnackBar(
+              content: Text(""),
+              duration: Duration(milliseconds: 500),
+            ));
+          },
+          superlikeAction: () {
+            _scaffoldKey.currentState?.showSnackBar(SnackBar(
+              content: Text(""),
+              duration: Duration(milliseconds: 500),
+            ));
+          },
+          onSlideUpdate: (SlideRegion? region) async {
+            print("");
+          }));
+    }
+
+    _matchEngine = MatchEngine(swipeItems: _swipeItems);
+    super.initState();
+  }
 
   // 
   void _matchMovie() {
@@ -68,44 +124,50 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.network(
-              'https://cdn.shopify.com/s/files/1/0652/4771/files/LOTR_REG_FINALS_Burgos_1024x1024.png?v=1611070010',
-              width: 256,
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.6,
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: SwipeCards(
+                matchEngine: _matchEngine!,
+                itemBuilder: (BuildContext context, int index) {
+                  /// returns container of stacked movie cards
+                  return Container(
+                    alignment: Alignment.center,
+                    child: _swipeItems[index].content.image
+                  );
+                },
+                onStackFinished: () {
+                  _scaffoldKey.currentState!.showSnackBar(SnackBar(
+                    content: Text("Stack Finished"),
+                    duration: Duration(milliseconds: 500),
+                  ));
+                },
+                itemChanged: (SwipeItem item, int index) {
+                  print("item: ${item.content.text}, index: $index");
+                },
+                upSwipeAllowed: false,
+                fillSpace: false,
+              ),
             ),
             Text(
-              _movieTitle,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            Text(
-              '_movieDesc',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            TextButton(
-              child: const Icon(Icons.close),
-              onPressed: _nextMovie,
-            ),
-            TextButton(
-              child: const Icon(Icons.check),
-              onPressed: _matchMovie,
-            ),
-          ],
-        ),
+                _movieTitle,
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              Text(
+                '_movieDesc',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              TextButton(
+                child: const Icon(Icons.close),
+                onPressed: _nextMovie,
+              ),
+              TextButton(
+                child: const Icon(Icons.check),
+                onPressed: _matchMovie,
+              ),
+        ]),
       ),
     );
   }
