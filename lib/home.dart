@@ -132,7 +132,7 @@ class _ChooseMoviesState extends State<ChooseMovies> {
     setState(() {
       _currentIndex++;
       _currentMovie = _moviesToDisplay[_currentIndex];
-      if (_currentIndex == _moviesToDisplay.length - 1) {
+      if (_currentIndex == _moviesToDisplay.length) {
         _showEmptyAlert();
       }
     });
