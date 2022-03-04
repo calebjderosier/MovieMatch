@@ -121,8 +121,7 @@ class _ChooseMoviesState extends State<ChooseMovies> {
     return _moviesToDisplay[_currentMovie.id];
   }
 
-  // Display the "no more movies" alert
-  void _showEmptyAlert() {
+  void _showAlert(String title, Icon icon, Color backgroundColor) {
     showDialog(
         context: context,
         builder: (context) {
@@ -139,58 +138,32 @@ class _ChooseMoviesState extends State<ChooseMovies> {
                     fontWeight: FontWeight.w500,
                     color: Colors.white),
                 children: [
-                  TextSpan(text: 'No more movies! '),
+                  TextSpan(text: title),
                   WidgetSpan(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 2.0, vertical: 2.0),
-                      child: Icon(Icons.hourglass_empty, color: Colors.white),
+                      child: icon,
                     ),
                   ),
                 ],
               ),
             )),
-            backgroundColor: Colors.blue,
+            backgroundColor: backgroundColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           );
         });
   }
 
+  // Display the "no more movies" alert
+  void _showEmptyAlert() {
+    _showAlert('No more matches! ', Icon(Icons.hourglass_empty, color: Colors.white), Colors.blue);
+  }
+
   // Display the "matched" alert
   void _showMatchedAlert() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          Future.delayed(Duration(seconds: 1), () {
-            Navigator.of(context).pop(true);
-          });
-          return AlertDialog(
-            title: Center(
-                child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white),
-                children: [
-                  TextSpan(text: 'Matched! '),
-                  WidgetSpan(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 2.0, vertical: 2.0),
-                      child: Icon(Icons.star, color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            )),
-            backgroundColor: Colors.pink,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          );
-        });
+    _showAlert('Matched! ', Icon(Icons.star, color: Colors.white), Colors.pink);
   }
 
   // Add this movie to liked array
