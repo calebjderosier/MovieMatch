@@ -36,13 +36,13 @@ class _ChooseMoviesState extends State<ChooseMovies> {
         posterPath:
             "https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg"),
     Movie(
-        id: 568124,
+        id: 2,
         title: 'Encanto',
         releaseDate: "12",
         posterPath:
             "https://m.media-amazon.com/images/I/71noGMUal1S._AC_SL1100_.jpg"),
     Movie(
-        id: 634649,
+        id: 3,
         title: 'Spider-Man: No Way Home',
         releaseDate: "123",
         posterPath:
@@ -53,9 +53,57 @@ class _ChooseMoviesState extends State<ChooseMovies> {
         releaseDate: "1234",
         posterPath:
             "https://sportshub.cbsistatic.com/i/2022/01/26/c77b5cd2-e1db-4e45-9049-8eaa1b9a7cd0/the-batman.jpg?auto=webp&width=1200&height=1778&crop=0.675:1,smart"),
+    Movie(
+        id: 5,
+        title: 'Shrek 2',
+        releaseDate: "123",
+        posterPath:
+            "https://cdn.shopify.com/s/files/1/1416/8662/products/shrek_2_2004_original_film_art_5000x.jpg?v=1551894581"),
+    Movie(
+        id: 6,
+        title: 'Harry Potter and the Chamber of Secrets',
+        releaseDate: "123",
+        posterPath:
+            "https://m.media-amazon.com/images/M/MV5BMTcxODgwMDkxNV5BMl5BanBnXkFtZTYwMDk2MDg3._V1_FMjpg_UX1000_.jpg"),
+    Movie(
+        id: 7,
+        title: 'Talladega Nights',
+        releaseDate: "123",
+        posterPath:
+            "https://m.media-amazon.com/images/M/MV5BNzAzOTk1OTIyM15BMl5BanBnXkFtZTcwNDIzNTQzMQ@@._V1_.jpg"),
+    Movie(
+        id: 8,
+        title: 'Bruce Almighty',
+        releaseDate: "123",
+        posterPath:
+            "https://m.media-amazon.com/images/I/51fpx3kKQ8L._SY445_.jpg"),
+    Movie(
+        id: 9,
+        title: 'Fantastic Beasts and Where to Find Them',
+        releaseDate: "123",
+        posterPath:
+            "https://m.media-amazon.com/images/I/91PdOec4bFL._SL1500_.jpg"),
+    Movie(
+        id: 10,
+        title: 'Matilda',
+        releaseDate: "123",
+        posterPath:
+            "https://m.media-amazon.com/images/I/91mIVq8Lk9L._SL1500_.jpg"),
+    Movie(
+        id: 11,
+        title: 'Mrs. Doubtfire',
+        releaseDate: "123",
+        posterPath:
+            "https://lumiere-a.akamaihd.net/v1/images/image_ef98a49a.jpeg"),
+    Movie(
+        id: 12,
+        title: 'Shrek',
+        releaseDate: "123",
+        posterPath:
+            "https://m.media-amazon.com/images/M/MV5BOGZhM2FhNTItODAzNi00YjA0LWEyN2UtNjJlYWQzYzU1MDg5L2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg"),
   ];
   
-  final List<int> _partnerMovies = [634649, 568124];
+  final List<int> _partnerMovies = [4, 5, 6, 8, 12, 10];
   final List<int> _myMovies = [];
 
   // Sets the current movie to another in the random list.
