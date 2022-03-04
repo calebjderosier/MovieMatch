@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class MovieMatchApp extends StatelessWidget {
+  const MovieMatchApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +19,24 @@ class ChooseMovies extends StatefulWidget {
 }
 
 class _ChooseMoviesState extends State<ChooseMovies> {
+  String movieImgUrl = 'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg';
+  void _matchMovie() {
+    setState(() {
+      // TODO: match this movie
+      // ignore: avoid_print
+      print('MatchMovie pressed');
+    });
+  }
+
+  //
+  void _nextMovie() {
+    setState(() {
+      // TODO: skip this movie
+      // ignore: avoid_print
+      print('NextMovie pressed');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +68,7 @@ class _ChooseMoviesState extends State<ChooseMovies> {
           ),
           Center(
               child: buildMovieItem(
-                  'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg',
+                  movieImgUrl,
                   context)),
           SizedBox(
             height: 35,
