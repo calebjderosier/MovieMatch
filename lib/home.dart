@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movie_match/network/Movie.dart';
 import 'dart:math';
+import 'package:swipe_cards/draggable_card.dart';
+import 'package:swipe_cards/swipe_cards.dart';
+import 'content.dart';
 
 class MovieMatchApp extends StatelessWidget {
   const MovieMatchApp({Key? key}) : super(key: key);
@@ -24,10 +27,28 @@ class _ChooseMoviesState extends State<ChooseMovies> {
   @override
   void initState() {
     super.initState();
-    _currentMovie = _moviesToDisplay[Random().nextInt(_moviesToDisplay.length)];
+    _moviesToDisplay.shuffle();
+    _currentMovie = _moviesToDisplay[0];
+    for (int i = 0; i < _moviesToDisplay.length; i++) {
+      _swipeItems.add(SwipeItem(
+        content: Content(
+            text: _moviesToDisplay[i].title,
+            image: Image.network(_moviesToDisplay[i].posterPath)),
+        likeAction: _swipedRight,
+        nopeAction: _swipedLeft,
+        superlikeAction: null,
+        onSlideUpdate: null,
+      ));
+    }
+
+    _matchEngine = MatchEngine(swipeItems: _swipeItems);
   }
 
+  int _currentIndex = 0;
   late Movie _currentMovie;
+  final List<SwipeItem> _swipeItems = <SwipeItem>[];
+  MatchEngine? _matchEngine;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   final List<Movie> _moviesToDisplay = [
     Movie(
         id: 1,
@@ -102,23 +123,19 @@ class _ChooseMoviesState extends State<ChooseMovies> {
         posterPath:
             "https://m.media-amazon.com/images/M/MV5BOGZhM2FhNTItODAzNi00YjA0LWEyN2UtNjJlYWQzYzU1MDg5L2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg"),
   ];
-  
+
   final List<int> _partnerMovies = [4, 5, 6, 8, 12, 10];
   final List<int> _myMovies = [];
 
   // Sets the current movie to another in the random list.
-  Movie _getNextMovie() {
+  void _updateIndex() {
     setState(() {
-      _moviesToDisplay.removeWhere((element) => element.id == _currentMovie.id);
-      int _nextId = _moviesToDisplay.length > 0 ? Random().nextInt(_moviesToDisplay.length) : -1;
-
-      if(_nextId != -1) {
-        _currentMovie = _moviesToDisplay[_nextId];
-      } else {
+      _currentIndex++;
+      _currentMovie = _moviesToDisplay[_currentIndex];
+      if (_currentIndex == _moviesToDisplay.length - 1) {
         _showEmptyAlert();
       }
     });
-    return _moviesToDisplay[_currentMovie.id];
   }
 
   void _showAlert(String title, Icon icon, Color backgroundColor) {
@@ -158,7 +175,8 @@ class _ChooseMoviesState extends State<ChooseMovies> {
 
   // Display the "no more movies" alert
   void _showEmptyAlert() {
-    _showAlert('No more matches! ', Icon(Icons.hourglass_empty, color: Colors.white), Colors.blue);
+    _showAlert('No more matches! ',
+        Icon(Icons.hourglass_empty, color: Colors.white), Colors.blue);
   }
 
   // Display the "matched" alert
@@ -171,13 +189,13 @@ class _ChooseMoviesState extends State<ChooseMovies> {
     setState(() {
       _myMovies.add(_currentMovie.id);
       if (_partnerMovies.contains(_currentMovie.id)) _showMatchedAlert();
-      _getNextMovie();
+      _updateIndex();
     });
   }
 
   // Skip this movie
   void _swipedLeft() {
-    _getNextMovie();
+    _updateIndex();
   }
 
   @override
@@ -187,75 +205,47 @@ class _ChooseMoviesState extends State<ChooseMovies> {
         padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
         children: [
           const SizedBox(
+            height: 50,
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.6,
+            width: MediaQuery.of(context).size.width * 0.4,
+            child: SwipeCards(
+              matchEngine: _matchEngine!,
+              itemBuilder: (BuildContext context, int index) {
+                /// returns container of stacked movie cards
+                return Container(
+                    alignment: Alignment.center,
+                    child: _swipeItems[index].content.image);
+              },
+              onStackFinished: () {
+                print("onStackFinished");
+              },
+              itemChanged: (SwipeItem item, int index) {
+                print("item: ${item.content.text}, index: $index");
+              },
+              upSwipeAllowed: false,
+              fillSpace: false,
+            ),
+          ),
+          const SizedBox(
             height: 15,
           ),
-          Center(child: buildMovieItem(_currentMovie, context)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                ),
-                onPressed: _swipedLeft,
-                child: const Icon(Icons.close),
-              ),
-              ElevatedButton(
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                ),
-                onPressed: _swipedRight,
-                child: const Icon(Icons.check),
-              )
-            ],
-          )
+          const SizedBox(
+            height: 35,
+          ),
+          Center(
+            child: Text(
+              _currentMovie.title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+            ),
+          ),
+          const SizedBox(
+            height: 35,
+          ),
         ],
       ),
     );
   }
-}
-
-// Create a new movie item using the given imgUrl and title.
-Column buildMovieItem(Movie movie, BuildContext context) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.75,
-        decoration: BoxDecoration(
-            border: Border.all(
-              width: 4,
-              color: Theme.of(context).scaffoldBackgroundColor,
-            ),
-            boxShadow: [
-              BoxShadow(
-                spreadRadius: 2,
-                blurRadius: 10,
-                color: Colors.black.withOpacity(0.1),
-                offset: const Offset(0, 10),
-              )
-            ],
-            image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(movie.posterPath))),
-      ),
-      const SizedBox(
-        height: 35,
-      ),
-      Center(
-        child: Text(
-          movie.title,
-          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-        ),
-      ),
-      const SizedBox(
-        height: 35,
-      ),
-    ],
-  );
 }
