@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _movieTitle = "Title";
   String _movieDesc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
-  // 
+  // Mark this movie as a match.
   void _matchMovie() {
     setState(() {
       // TODO: match this movie
@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  //
+  // Skip to the next movie. 
   void _nextMovie() {
     setState(() {
       // TODO: skip this movie
@@ -68,24 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image.network(
-              'https://cdn.shopify.com/s/files/1/0652/4771/files/LOTR_REG_FINALS_Burgos_1024x1024.png?v=1611070010',
+              'https://cdn.shopify.com/s/files/1/0652/4771/files/LOTR_REG_FINALS_Burgos_1024x1024.png?v=1611070010', // placeholder movie poster
               width: 256,
             ),
             Text(
@@ -93,17 +79,33 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headline4,
             ),
             Text(
-              '_movieDesc',
+              _movieDesc,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            TextButton(
-              child: const Icon(Icons.close),
-              onPressed: _nextMovie,
-            ),
-            TextButton(
-              child: const Icon(Icons.check),
-              onPressed: _matchMovie,
-            ),
+            Center(
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextButton(
+                      child: const Icon(Icons.close),
+                      onPressed: _nextMovie,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.only(left: 48, right: 24),
+                      ),
+                    )
+                  ),
+                  Expanded(
+                    child: TextButton(
+                      child: const Icon(Icons.check),
+                      onPressed: _matchMovie,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.only(left: 24, right: 48),
+                      ),
+                    ),
+                  ),
+                ]
+              )
+            )
           ],
         ),
       ),
