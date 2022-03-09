@@ -21,16 +21,16 @@ class Movie {
     final String posterPath;
 
     factory Movie.fromJson(Map<String, dynamic> json) => Movie(
-        id: json["id"],
-        title: json["original_title"],
-        releaseDate: json["release_date"],
-        posterPath: json["poster_path"]
+        id: json["id"] as int,
+        title: json["original_title"] as String,
+        releaseDate: json["release_date"] as String,
+        posterPath: json["poster_path"] as String
     );
 
     Map<String, dynamic> toJson() => {
-        "id": id,
-        "original_title": title,
-        "release_date": releaseDate,
-        "poster_path": posterPath
-      };
+      "id": id,
+      "original_title": title,
+      "release_date": releaseDate,
+      "poster_path": posterPath
+    };
 }

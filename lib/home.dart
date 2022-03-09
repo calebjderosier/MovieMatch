@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:movie_match/network/Movie.dart';
 import 'dart:math';
+import 'package:http/http.dart' as http;
+import 'dart:developer' as log;
+
+import 'network/APIKey.dart';
 
 class MovieMatchApp extends StatelessWidget {
   const MovieMatchApp({Key? key}) : super(key: key);
@@ -21,10 +25,14 @@ class ChooseMovies extends StatefulWidget {
 }
 
 class _ChooseMoviesState extends State<ChooseMovies> {
+
+  late Future<List<Movie>> movies;
+
   @override
   void initState() {
     super.initState();
     _currentMovie = _moviesToDisplay[Random().nextInt(_moviesToDisplay.length)];
+    movies = fetchPopularMovies();
   }
 
   late Movie _currentMovie;
@@ -105,7 +113,27 @@ class _ChooseMoviesState extends State<ChooseMovies> {
           const SizedBox(
             height: 15,
           ),
-          Center(child: buildMovieItem(_currentMovie, context)),
+          Center(
+            child: FutureBuilder<List<Movie>>(
+              future: movies,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<List<Movie>> snapshot,
+              ) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                  return Text(snapshot.data!.first.title);
+                } else {
+                  if (snapshot.hasError) {
+                    return Text(snapshot.error.toString());
+                  }
+                  return Text('Empty');
+                }
+              },
+
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -175,3 +203,14 @@ Column buildMovieItem(Movie movie, BuildContext context) {
     ],
   );
 }
+
+Future<List<Movie>> fetchPopularMovies() async {
+    var response =
+        await http.get(Uri.parse("https://api.themoviedb.org/3/movie/popular?api_key=f6547b65f627de34d9371c04eb570048"));
+    if (response.statusCode == 200) {
+      var data = response.body;
+      return movieModelFromJson(data);
+    } else {
+      throw Exception();
+    }
+  }
